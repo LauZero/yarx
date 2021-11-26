@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"embed"
-	"github.com/kataras/golog"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -12,6 +11,8 @@ import (
 	"strings"
 	"sync"
 	"text/template"
+
+	"github.com/kataras/golog"
 )
 
 type route struct {
@@ -52,7 +53,7 @@ func (h *RegexpHandler) handleIndex(w http.ResponseWriter, r *http.Request) {
 	for _, chain := range h.chainsBackup {
 		var info pocInfo
 		for _, rule := range chain.rules {
-			info.URI = append(info.URI, rule.Method + " " +  rule.ReplacedURI)
+			info.URI = append(info.URI, rule.Method+" "+rule.ReplacedURI)
 		}
 		info.Name = chain.Name
 		data = append(data, &info)
@@ -99,13 +100,13 @@ NextRoute:
 	}
 	if h.fileServer != nil {
 		h.fileServer.ServeHTTP(w, r)
-	} else {
-		if r.URL.Path == "" || r.URL.Path == "/" {
-			h.handleIndex(w, r)
-		} else {
-			w.WriteHeader(404)
-			w.Write([]byte("not found"))
-		}
+		// } else {
+		// if r.URL.Path == "" || r.URL.Path == "/" {
+		// 	h.handleIndex(w, r)
+		// } else {
+		// 	w.WriteHeader(404)
+		// 	w.Write([]byte("not found"))
+		// }
 	}
 }
 
